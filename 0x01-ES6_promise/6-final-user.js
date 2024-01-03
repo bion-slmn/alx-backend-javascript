@@ -3,5 +3,8 @@ import uploadPhoto from './5-photo-reject';
 
 export default function handleProfileSignup(firstName, lastName, fileName) {
   return Promise.allSettled([signUpUser(firstName, lastName), uploadPhoto(fileName)])
-    .then((response) => console.log(response));
+    .then((responses) => responses.map((val) => ({
+      status: val.status,
+      value: val.value !== undefined ? val.value : val.reason,
+    })));
 }
