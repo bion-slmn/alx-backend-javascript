@@ -5,5 +5,5 @@
  * @ return {array} ojbject that are in that city
  */
 export default function getStudentsByLocation(data, city) {
-  return data.filter(obj => obj.location === city);
+  return data.filter((obj) => obj.location === city);
 }
