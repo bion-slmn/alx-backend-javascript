@@ -5,8 +5,12 @@
  */
 export default function updateUniqueItems(data) {
   // updating the map
-  data.forEach((value, key) => {
-    if (value === 1) data.set(key, 100);
-  });
-  return data;
+  if (data instanceof Map) {
+    data.forEach((value, key) => {
+      if (value === 1) data.set(key, 100);
+    });
+    return data;
+  }
+  // if not a map
+  throw new Error('Cannot process');
 }
