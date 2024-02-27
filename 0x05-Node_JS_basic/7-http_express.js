@@ -2,7 +2,6 @@
  * create a server using express
  */
 const express = require('express');
-const args = require('process').argv;
 const fs = require('fs');
 
 const app = express();
@@ -47,14 +46,16 @@ function countStudents(filePath) {
   });
 }
 
+
+const DB = process.argv.length > 2 ? process.argv[2] : '';
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
 app.get('/students', (req, res) => {
-  countStudents(args[2])
+  countStudents(DB)
     .then((result) => {
-      res.send(`This is the list of our students:\n${result.join('\n')}`);
+      res.send(`This is the list of our students\n${result.join('\n')}`);
     })
     .catch((error) => {
       res.send(error.message);
