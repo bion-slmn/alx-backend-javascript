@@ -1,52 +1,40 @@
 const fs = require('fs');
-const readline = require('readline');
 
-async function countStudents(pathOfFile) {
+function countStudents(filePath) {
   return new Promise((resolve, reject) => {
-    const records = {};
-    let firstLine = true;
-
-    // Check if file exists before creating the readline interface
-    if (!fs.existsSync(pathOfFile)) {
+    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
       throw new Error('Cannot load the database');
     }
 
-    const readfile = readline.createInterface({
-      input: fs.createReadStream(pathOfFile),
-      output: process.stdout,
-      terminal: false,
-
-    });
-
-    readfile.on('line', (data) => {
-    // Processing each line of data from the file
-      if (firstLine || data.trim().length === 0) {
-        firstLine = false;
-        return; // Skip the first line if needed
+    fs.readFile(filePath, 'utf-8', (err, data) => {
+      if (err) {
+        reject(err);
+        return;
       }
+      const lines = data.trim().split('\n');
+      const removeHeading = lines.slice(1);
 
-      const lineArray = data.split(',');
-      const field = lineArray[lineArray.length - 1];
+      const studentNo = removeHeading.length;
+      const records = {};
 
-      if (!Object.keys(records).includes(field)) {
-        records[field] = [lineArray[0]];
-      } else {
-        records[field].push(lineArray[0]);
-      }
-    });
+      removeHeading.forEach((val) => {
+        const recordArray = val.split(',');
+        const field = recordArray[recordArray.length - 1];
 
-    readfile.on('close', () => {
-      const numberOfstudents = Object.values(records).reduce((acc, curr) => acc + curr.length, 0);
-      console.log(`Number of students: ${numberOfstudents}`);
+        if (!Object.keys(records).includes(field)) {
+          records[field] = [recordArray[0]];
+        } else {
+          records[field].push(recordArray[0]);
+        }
+      });
+
+      console.log(`Number of students: ${studentNo}`);
       Object.keys(records).forEach((key) => {
         const value = records[key];
-        console.log(`Number of students in FIELD: ${value.length}. List: ${value.join(', ')}`);
+        console.log(`Number of students in ${key}: ${
+          value.length}. List: ${value.join(', ')}`);
       });
       resolve();
-    });
-
-    readfile.on('error', (err) => {
-      reject(err);
     });
   });
 }
