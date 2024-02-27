@@ -6,7 +6,7 @@ function countStudents(pathOfFile) {
   let firstLine = true;
 
   // Check if file exists before creating the readline interface
-  if (!fs.existsSync(pathOfFile)) {
+  if (!fs.existsSync(pathOfFile) || !fs.statSync(pathOfFile).isFile()) {
     throw new Error('Cannot load the database');
   }
 
@@ -35,11 +35,14 @@ function countStudents(pathOfFile) {
   });
 
   readfile.on('close', () => {
-    const numberOfstudents = Object.values(records).reduce((acc, curr) => acc + curr.length, 0);
+    const numberOfstudents = Object.values(records).reduce(
+      (acc, curr) => acc + curr.length, 0,
+    );
     console.log(`Number of students: ${numberOfstudents}`);
     Object.keys(records).forEach((key) => {
       const value = records[key];
-      console.log(`Number of students in ${key}: ${value.length}. List: ${value.join(', ')}`);
+      console.log(`Number of students in ${key}: ${
+        value.length}. List: ${value.join(', ')}`);
     });
   });
 }
