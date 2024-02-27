@@ -46,7 +46,6 @@ function countStudents(filePath) {
   });
 }
 
-
 const DB = process.argv.length > 2 ? process.argv[2] : '';
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
