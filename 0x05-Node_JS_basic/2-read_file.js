@@ -19,7 +19,7 @@ function countStudents(pathOfFile) {
 
   readfile.on('line', (data) => {
     // Processing each line of data from the file
-    if (firstLine || data.length === 0) {
+    if (firstLine || data.trim().length === 0) {
       firstLine = false;
       return; // Skip the first line if needed
     }
@@ -41,8 +41,7 @@ function countStudents(pathOfFile) {
     console.log(`Number of students: ${numberOfstudents}`);
     Object.keys(records).forEach((key) => {
       const value = records[key];
-      console.log(`Number of students in ${key}: ${
-        value.length}. List: ${value.join(', ')}`);
+      console.log(`Number of students in ${key}: ${value.length}. List: ${value.join(', ')}`);
     });
   });
 }
