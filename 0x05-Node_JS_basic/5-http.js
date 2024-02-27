@@ -7,7 +7,7 @@ const args = require('process').argv;
 function countStudents(filePath) {
   return new Promise((resolve, reject) => {
     if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-      throw new Error('Cannot load the database');
+      reject(new Error('Cannot load the database'));
     }
 
     fs.readFile(filePath, 'utf-8', (err, data) => {
@@ -59,7 +59,7 @@ const app = http.createServer((request, response) => {
         response.end();
       })
       .catch((error) => {
-        response.write(error);
+        response.write(error.toString());
         response.end();
       });
   }
